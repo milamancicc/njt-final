@@ -5,22 +5,25 @@
 package app.domain;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -31,76 +34,75 @@ import java.util.Date;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Sportista.findAll", query = "SELECT s FROM Sportista s"),
-    @NamedQuery(name = "Sportista.findByIdSportiste", query = "SELECT s FROM Sportista s WHERE s.idSportiste = :idSportiste"),
+    @NamedQuery(name = "Sportista.findByKorisnickoIme", query = "SELECT s FROM Sportista s WHERE s.korisnickoIme = :korisnickoIme"),
+    @NamedQuery(name = "Sportista.findBySifra", query = "SELECT s FROM Sportista s WHERE s.sifra = :sifra"),
     @NamedQuery(name = "Sportista.findByIme", query = "SELECT s FROM Sportista s WHERE s.ime = :ime"),
     @NamedQuery(name = "Sportista.findByPrezime", query = "SELECT s FROM Sportista s WHERE s.prezime = :prezime"),
-    @NamedQuery(name = "Sportista.findByDatumRodjenja", query = "SELECT s FROM Sportista s WHERE s.datumRodjenja = :datumRodjenja"),
     @NamedQuery(name = "Sportista.findByPol", query = "SELECT s FROM Sportista s WHERE s.pol = :pol"),
-    @NamedQuery(name = "Sportista.findByKontakt", query = "SELECT s FROM Sportista s WHERE s.kontakt = :kontakt")})
+    @NamedQuery(name = "Sportista.findByDatumRodjenja", query = "SELECT s FROM Sportista s WHERE s.datumRodjenja = :datumRodjenja")})
 public class Sportista implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idSportiste")
-    private Long idSportiste;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
+    @Column(name = "korisnickoIme")
+    private String korisnickoIme;
+    @Size(max = 255)
+    @Column(name = "sifra")
+    private String sifra;
+    @Size(max = 255)
     @Column(name = "ime")
     private String ime;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "prezime")
     private String prezime;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "pol")
+    private Character pol;
     @Column(name = "datumRodjenja")
     @Temporal(TemporalType.DATE)
     private LocalDate datumRodjenja;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "pol")
-    private char pol;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "kontakt")
-    private String kontakt;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sportista")
+    private List<SportistaVezba> sportistaVezbaList;
+    @JoinColumn(name = "trener", referencedColumnName = "korisnickoIme")
+    @ManyToOne
+    private Trener trener;
 
     public Sportista() {
     }
 
-    public Sportista(Long idSportiste) {
-        this.idSportiste = idSportiste;
-    }
-
-    public Sportista(String ime, String prezime, LocalDate datumRodjenja, char pol, String kontakt) {
+    public Sportista(String korisnickoIme, String sifra, String ime, String prezime, Character pol, LocalDate datumRodjenja, Trener trener) {
+        this.korisnickoIme = korisnickoIme;
+        this.sifra = sifra;
         this.ime = ime;
         this.prezime = prezime;
-        this.datumRodjenja = datumRodjenja;
         this.pol = pol;
-        this.kontakt = kontakt;
+        this.datumRodjenja = datumRodjenja;
+        this.sportistaVezbaList = sportistaVezbaList;
+        this.trener = trener;
     }
     
+    
 
-    public Sportista(Long idSportiste, String ime, String prezime, LocalDate datumRodjenja, char pol, String kontakt) {
-        this.idSportiste = idSportiste;
-        this.ime = ime;
-        this.prezime = prezime;
-        this.datumRodjenja = datumRodjenja;
-        this.pol = pol;
-        this.kontakt = kontakt;
+    public Sportista(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
     }
 
-    public Long getIdSportiste() {
-        return idSportiste;
+    public String getKorisnickoIme() {
+        return korisnickoIme;
     }
 
-    public void setIdSportiste(Long idSportiste) {
-        this.idSportiste = idSportiste;
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+
+    public String getSifra() {
+        return sifra;
+    }
+
+    public void setSifra(String sifra) {
+        this.sifra = sifra;
     }
 
     public String getIme() {
@@ -119,6 +121,14 @@ public class Sportista implements Serializable {
         this.prezime = prezime;
     }
 
+    public Character getPol() {
+        return pol;
+    }
+
+    public void setPol(Character pol) {
+        this.pol = pol;
+    }
+
     public LocalDate getDatumRodjenja() {
         return datumRodjenja;
     }
@@ -127,26 +137,27 @@ public class Sportista implements Serializable {
         this.datumRodjenja = datumRodjenja;
     }
 
-    public char getPol() {
-        return pol;
+    @XmlTransient
+    public List<SportistaVezba> getSportistaVezbaList() {
+        return sportistaVezbaList;
     }
 
-    public void setPol(char pol) {
-        this.pol = pol;
+    public void setSportistaVezbaList(List<SportistaVezba> sportistaVezbaList) {
+        this.sportistaVezbaList = sportistaVezbaList;
     }
 
-    public String getKontakt() {
-        return kontakt;
+    public Trener getTrener() {
+        return trener;
     }
 
-    public void setKontakt(String kontakt) {
-        this.kontakt = kontakt;
+    public void setTrener(Trener trener) {
+        this.trener = trener;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idSportiste != null ? idSportiste.hashCode() : 0);
+        hash += (korisnickoIme != null ? korisnickoIme.hashCode() : 0);
         return hash;
     }
 
@@ -157,7 +168,7 @@ public class Sportista implements Serializable {
             return false;
         }
         Sportista other = (Sportista) object;
-        if ((this.idSportiste == null && other.idSportiste != null) || (this.idSportiste != null && !this.idSportiste.equals(other.idSportiste))) {
+        if ((this.korisnickoIme == null && other.korisnickoIme != null) || (this.korisnickoIme != null && !this.korisnickoIme.equals(other.korisnickoIme))) {
             return false;
         }
         return true;
@@ -165,7 +176,7 @@ public class Sportista implements Serializable {
 
     @Override
     public String toString() {
-        return "app.domain.Sportista[ idSportiste=" + idSportiste + " ]";
+        return "app.domain.Sportista[ korisnickoIme=" + korisnickoIme + " ]";
     }
     
 }

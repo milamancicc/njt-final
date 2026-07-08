@@ -5,18 +5,20 @@
 package app.domain;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -27,67 +29,31 @@ import java.io.Serializable;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vezba.findAll", query = "SELECT v FROM Vezba v"),
-    @NamedQuery(name = "Vezba.findByIdVezbe", query = "SELECT v FROM Vezba v WHERE v.idVezbe = :idVezbe"),
     @NamedQuery(name = "Vezba.findByNaziv", query = "SELECT v FROM Vezba v WHERE v.naziv = :naziv"),
-    @NamedQuery(name = "Vezba.findByOpis", query = "SELECT v FROM Vezba v WHERE v.opis = :opis"),
     @NamedQuery(name = "Vezba.findByNorma", query = "SELECT v FROM Vezba v WHERE v.norma = :norma"),
-    @NamedQuery(name = "Vezba.findByJedinicaMere", query = "SELECT v FROM Vezba v WHERE v.jedinicaMere = :jedinicaMere"),
-    @NamedQuery(name = "Vezba.findByKategorija", query = "SELECT v FROM Vezba v WHERE v.kategorija = :kategorija")})
+    @NamedQuery(name = "Vezba.findByOpis", query = "SELECT v FROM Vezba v WHERE v.opis = :opis")})
 public class Vezba implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idVezbe")
-    private Long idVezbe;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "naziv")
     private String naziv;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Column(name = "norma")
+    private Integer norma;
+    @Size(max = 255)
     @Column(name = "opis")
     private String opis;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "norma")
-    private double norma;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "jedinicaMere")
-    private String jedinicaMere;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "kategorija")
-    private String kategorija;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vezba")
+    private List<SportistaVezba> sportistaVezbaList;
 
     public Vezba() {
     }
 
-    public Vezba(Long idVezbe) {
-        this.idVezbe = idVezbe;
-    }
-
-    public Vezba(Long idVezbe, String naziv, String opis, double norma, String jedinicaMere, String kategorija) {
-        this.idVezbe = idVezbe;
+    public Vezba(String naziv) {
         this.naziv = naziv;
-        this.opis = opis;
-        this.norma = norma;
-        this.jedinicaMere = jedinicaMere;
-        this.kategorija = kategorija;
-    }
-
-    public Long getIdVezbe() {
-        return idVezbe;
-    }
-
-    public void setIdVezbe(Long idVezbe) {
-        this.idVezbe = idVezbe;
     }
 
     public String getNaziv() {
@@ -98,6 +64,14 @@ public class Vezba implements Serializable {
         this.naziv = naziv;
     }
 
+    public Integer getNorma() {
+        return norma;
+    }
+
+    public void setNorma(Integer norma) {
+        this.norma = norma;
+    }
+
     public String getOpis() {
         return opis;
     }
@@ -106,34 +80,19 @@ public class Vezba implements Serializable {
         this.opis = opis;
     }
 
-    public double getNorma() {
-        return norma;
+    @XmlTransient
+    public List<SportistaVezba> getSportistaVezbaList() {
+        return sportistaVezbaList;
     }
 
-    public void setNorma(double norma) {
-        this.norma = norma;
-    }
-
-    public String getJedinicaMere() {
-        return jedinicaMere;
-    }
-
-    public void setJedinicaMere(String jedinicaMere) {
-        this.jedinicaMere = jedinicaMere;
-    }
-
-    public String getKategorija() {
-        return kategorija;
-    }
-
-    public void setKategorija(String kategorija) {
-        this.kategorija = kategorija;
+    public void setSportistaVezbaList(List<SportistaVezba> sportistaVezbaList) {
+        this.sportistaVezbaList = sportistaVezbaList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idVezbe != null ? idVezbe.hashCode() : 0);
+        hash += (naziv != null ? naziv.hashCode() : 0);
         return hash;
     }
 
@@ -144,7 +103,7 @@ public class Vezba implements Serializable {
             return false;
         }
         Vezba other = (Vezba) object;
-        if ((this.idVezbe == null && other.idVezbe != null) || (this.idVezbe != null && !this.idVezbe.equals(other.idVezbe))) {
+        if ((this.naziv == null && other.naziv != null) || (this.naziv != null && !this.naziv.equals(other.naziv))) {
             return false;
         }
         return true;
@@ -152,7 +111,7 @@ public class Vezba implements Serializable {
 
     @Override
     public String toString() {
-        return "app.domain.Vezba[ idVezbe=" + idVezbe + " ]";
+        return "app.domain.Vezba[ naziv=" + naziv + " ]";
     }
     
 }

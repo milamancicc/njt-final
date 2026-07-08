@@ -6,5 +6,7 @@
     <class>app.domain.Trener</class>
     <class>app.domain.Mesto</class>
     <class>app.domain.Sportista</class>
+    <class>app.domain.Izvestaj</class>
+    <class>app.domain.SportistaVezba</class>
   </persistence-unit>
 </persistence>

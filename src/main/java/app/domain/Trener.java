@@ -7,16 +7,17 @@ package app.domain;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -27,68 +28,62 @@ import java.io.Serializable;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Trener.findAll", query = "SELECT t FROM Trener t"),
-    @NamedQuery(name = "Trener.findByIdTrenera", query = "SELECT t FROM Trener t WHERE t.idTrenera = :idTrenera"),
-    @NamedQuery(name = "Trener.findByIme", query = "SELECT t FROM Trener t WHERE t.ime = :ime"),
-    @NamedQuery(name = "Trener.findByPrezime", query = "SELECT t FROM Trener t WHERE t.prezime = :prezime"),
-    @NamedQuery(name = "Trener.findByKontakt", query = "SELECT t FROM Trener t WHERE t.kontakt = :kontakt"),
     @NamedQuery(name = "Trener.findByKorisnickoIme", query = "SELECT t FROM Trener t WHERE t.korisnickoIme = :korisnickoIme"),
-    @NamedQuery(name = "Trener.findBySifra", query = "SELECT t FROM Trener t WHERE t.sifra = :sifra")})
+    @NamedQuery(name = "Trener.findBySifra", query = "SELECT t FROM Trener t WHERE t.sifra = :sifra"),
+    @NamedQuery(name = "Trener.findByIme", query = "SELECT t FROM Trener t WHERE t.ime = :ime"),
+    @NamedQuery(name = "Trener.findByPrezime", query = "SELECT t FROM Trener t WHERE t.prezime = :prezime")})
 public class Trener implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idTrenera")
-    private Long idTrenera;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "ime")
-    private String ime;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "prezime")
-    private String prezime;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "kontakt")
-    private String kontakt;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "korisnickoIme")
     private String korisnickoIme;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "sifra")
     private String sifra;
+    @Size(max = 255)
+    @Column(name = "ime")
+    private String ime;
+    @Size(max = 255)
+    @Column(name = "prezime")
+    private String prezime;
+    @OneToMany(mappedBy = "trener")
+    private List<Sportista> sportistaList;
 
     public Trener() {
     }
 
-    public Trener(Long idTrenera) {
-        this.idTrenera = idTrenera;
+    public Trener(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
     }
 
-    public Trener(Long idTrenera, String ime, String prezime, String kontakt, String korisnickoIme, String sifra) {
-        this.idTrenera = idTrenera;
-        this.ime = ime;
-        this.prezime = prezime;
-        this.kontakt = kontakt;
+    public Trener(String korisnickoIme, String sifra, String ime, String prezime, List<Sportista> sportistaList) {
         this.korisnickoIme = korisnickoIme;
         this.sifra = sifra;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.sportistaList = sportistaList;
+    }
+    
+    
+
+    public String getKorisnickoIme() {
+        return korisnickoIme;
     }
 
-    public Long getIdTrenera() {
-        return idTrenera;
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
     }
 
-    public void setIdTrenera(Long idTrenera) {
-        this.idTrenera = idTrenera;
+    public String getSifra() {
+        return sifra;
+    }
+
+    public void setSifra(String sifra) {
+        this.sifra = sifra;
     }
 
     public String getIme() {
@@ -107,34 +102,19 @@ public class Trener implements Serializable {
         this.prezime = prezime;
     }
 
-    public String getKontakt() {
-        return kontakt;
+    @XmlTransient
+    public List<Sportista> getSportistaList() {
+        return sportistaList;
     }
 
-    public void setKontakt(String kontakt) {
-        this.kontakt = kontakt;
-    }
-
-    public String getKorisnickoIme() {
-        return korisnickoIme;
-    }
-
-    public void setKorisnickoIme(String korisnickoIme) {
-        this.korisnickoIme = korisnickoIme;
-    }
-
-    public String getSifra() {
-        return sifra;
-    }
-
-    public void setSifra(String sifra) {
-        this.sifra = sifra;
+    public void setSportistaList(List<Sportista> sportistaList) {
+        this.sportistaList = sportistaList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idTrenera != null ? idTrenera.hashCode() : 0);
+        hash += (korisnickoIme != null ? korisnickoIme.hashCode() : 0);
         return hash;
     }
 
@@ -145,7 +125,7 @@ public class Trener implements Serializable {
             return false;
         }
         Trener other = (Trener) object;
-        if ((this.idTrenera == null && other.idTrenera != null) || (this.idTrenera != null && !this.idTrenera.equals(other.idTrenera))) {
+        if ((this.korisnickoIme == null && other.korisnickoIme != null) || (this.korisnickoIme != null && !this.korisnickoIme.equals(other.korisnickoIme))) {
             return false;
         }
         return true;
@@ -153,7 +133,7 @@ public class Trener implements Serializable {
 
     @Override
     public String toString() {
-        return "app.domain.Trener[ idTrenera=" + idTrenera + " ]";
+        return "app.domain.Trener[ korisnickoIme=" + korisnickoIme + " ]";
     }
     
 }
