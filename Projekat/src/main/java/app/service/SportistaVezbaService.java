@@ -36,11 +36,12 @@ public class SportistaVezbaService {
     }
     
     
-    public void delete(SportistaVezbaDto dto){
-        svr.delete(dto.getSportistaId(), dto.getVezbaId());
+    public void delete(String sportista, String vezba){
+        svr.delete(sportista, vezba);
     }
     
-    public void update(SportistaVezbaDto dto){
+    public void update(String sportistaId, String vezbaId, Integer br){
+        SportistaVezbaDto dto = new SportistaVezbaDto(sportistaId, vezbaId, br);
         svr.update(svc.toEntity(dto));
     }
     
@@ -48,7 +49,9 @@ public class SportistaVezbaService {
         List<SportistaVezba> sportistavezbe = svr.findBySportistaId(sportistaId);
         List<SportistaVezbaDto> dtoList = new ArrayList<>();
         for(SportistaVezba s: sportistavezbe){
-            dtoList.add(svc.toDto(s));
+            SportistaVezbaDto svd = svc.toDto(s);
+            svd.setNorma(vr.findById(svd.getVezbaId()).getNorma());
+            dtoList.add(svd);
         }
         return dtoList;
     }

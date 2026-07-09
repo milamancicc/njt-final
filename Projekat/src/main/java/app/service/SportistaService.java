@@ -26,11 +26,12 @@ public class SportistaService {
     }
     
     public void save(SportistaDto dto){
+        System.out.println("TRERNER ID: " + dto.getTrenerId());
         sr.save(sc.toEntity(dto));
     }
     
-    public void delete(SportistaDto dto){
-        sr.delete(dto.getKorisnickoIme());
+    public void delete(String kI){
+        sr.delete(kI);
     }
     
     public List<SportistaDto> findAllByTrener(String trenerId){
@@ -47,5 +48,15 @@ public class SportistaService {
         if(s == null)
             return null;
         return sc.toDto(s);
+    }
+    
+    public SportistaDto login(String kI, String sifra){
+        Sportista sportista = sr.login(kI, sifra);
+
+        if(sportista == null){
+            return null;
+        }
+
+        return sc.toDto(sportista);
     }
 }

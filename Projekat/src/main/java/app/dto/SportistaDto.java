@@ -4,6 +4,7 @@
  */
 package app.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
 /**
@@ -16,6 +17,7 @@ public class SportistaDto {
     private String ime;
     private String prezime;
     private Character pol;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumRodjenja;
 
     private String trenerId;

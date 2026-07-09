@@ -103,6 +103,23 @@ public class SportistaRepository {
 
 
     public void delete(String korisnickoIme) {
-        jdbcTemplate.update("DELETE sportista FROM sportista WHERE korisnickoIme=?",korisnickoIme);
+        
+        jdbcTemplate.update(
+            "DELETE FROM sportista_vezba WHERE sportista_id=?",
+            korisnickoIme
+        );
+
+        jdbcTemplate.update(
+            "DELETE FROM sportista WHERE korisnickoIme=?",
+            korisnickoIme
+        );
+    }
+    
+    public Sportista login(String korisnickoIme, String sifra){
+        Sportista s = findById(korisnickoIme);
+        if(s != null && s.getSifra().equals(sifra)){
+            return s;
+        }
+        return null;
     }
 }

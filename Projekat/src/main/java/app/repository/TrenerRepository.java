@@ -67,4 +67,14 @@ public class TrenerRepository {
 
         return t;
     }
+    
+    public Trener login(String korisnickoIme, String sifra){
+        Trener t = findById(korisnickoIme);
+
+        if(t != null && t.getSifra().equals(sifra)){
+            return t;
+        }
+
+        return null;
+    }
 }

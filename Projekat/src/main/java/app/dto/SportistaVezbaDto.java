@@ -12,12 +12,22 @@ public class SportistaVezbaDto {
     private String sportistaId;
     private String vezbaId;
     private Integer brojPonavljanja;
+    private Integer norma;
 
     public SportistaVezbaDto(String sportistaId, String vezbaId, Integer brojPonavljanja) {
         this.sportistaId = sportistaId;
         this.vezbaId = vezbaId;
         this.brojPonavljanja = brojPonavljanja;
     }
+
+    public SportistaVezbaDto(String sportistaId, String vezbaId, Integer brojPonavljanja, Integer norma) {
+        this.sportistaId = sportistaId;
+        this.vezbaId = vezbaId;
+        this.brojPonavljanja = brojPonavljanja;
+        this.norma = norma;
+    }
+    
+    
 
     public SportistaVezbaDto() {
     }
@@ -44,6 +54,14 @@ public class SportistaVezbaDto {
 
     public void setBrojPonavljanja(Integer brojPonavljanja) {
         this.brojPonavljanja = brojPonavljanja;
+    }
+
+    public Integer getNorma() {
+        return norma;
+    }
+
+    public void setNorma(Integer norma) {
+        this.norma = norma;
     }
     
     

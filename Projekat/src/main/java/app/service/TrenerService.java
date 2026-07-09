@@ -32,4 +32,13 @@ public class TrenerService {
         return tc.toDto(t);
     }
     
+    public TrenerDto login(String korisnickoIme, String sifra){
+        Trener trener = tr.login(korisnickoIme, sifra);
+
+        if(trener == null){
+            return null;
+        }
+
+        return tc.toDto(trener);
+    }
 }
