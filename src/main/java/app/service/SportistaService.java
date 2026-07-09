@@ -43,6 +43,9 @@ public class SportistaService {
     }
     
     public SportistaDto findById(String id){
-        return sc.toDto(sr.findById(id));
+        Sportista s = sr.findById(id);
+        if(s == null)
+            return null;
+        return sc.toDto(s);
     }
 }

@@ -11,10 +11,6 @@ import app.dto.TrenerDto;
 import app.service.SportistaService;
 import app.service.SportistaVezbaService;
 import app.service.TrenerService;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,11 +42,7 @@ public class Application {
     public static void main(String[] args) {
         ApplicationContext container = new AnnotationConfigApplicationContext(AppConfig.class);
         Application app = container.getBean(Application.class);
-        TrenerDto t = app.findTrenerById("tara");
-        List<SportistaVezbaDto> lista = app.findAllSportistaVezbaBySportista("lala");
-        for(SportistaVezbaDto l:lista){
-            System.out.println(l.getVezbaId());
-        }
+                
     }
     
     public void saveSportista(SportistaDto dto){

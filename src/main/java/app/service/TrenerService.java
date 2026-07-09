@@ -25,7 +25,11 @@ public class TrenerService {
     }
     
     public TrenerDto findById(String id){
-        return tc.toDto(tr.findById(id));
+        Trener t = tr.findById(id);
+        if (t == null) {
+            return null;
+        }
+        return tc.toDto(t);
     }
     
 }

@@ -9,6 +9,8 @@ package app.converter;
  * @author PC
  */
 public interface Converter<T, TDto> {
+    
     public T toEntity(TDto dto);
+    
     public TDto toDto(T entity);
 }

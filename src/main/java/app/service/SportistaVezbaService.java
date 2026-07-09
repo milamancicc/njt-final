@@ -20,8 +20,8 @@ import java.util.List;
 public class SportistaVezbaService {
     public final SportistaVezbaRepository svr;
     private SportistaVezbaConverter svc;
-    private SportistaRepository sr;
-    private VezbaRepository vr;
+    private final SportistaRepository sr;
+    private final VezbaRepository vr;
 
     public SportistaVezbaService(SportistaVezbaRepository svr, SportistaRepository sr, VezbaRepository vr) {
         this.svr = svr;

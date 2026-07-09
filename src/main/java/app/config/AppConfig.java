@@ -41,8 +41,9 @@ public class AppConfig {
      }
      
      @Bean(value = "sportista-service")
-     public SportistaService createSportistaService(@Qualifier(value="sportista-repository") SportistaRepository sr){
-         return new SportistaService(sr, new TrenerRepository(getJdbcTemplate(dataSource())));
+     public SportistaService createSportistaService(@Qualifier(value="sportista-repository") SportistaRepository sr,
+             @Qualifier(value = "trener-repository") TrenerRepository tr){
+         return new SportistaService(sr, tr);
      }
      
      @Bean(value = "trener-service")
@@ -51,8 +52,9 @@ public class AppConfig {
      }
      @Bean(value = "sportistaVezbe-service")
      public  SportistaVezbaService createSportistaVezbaService(@Qualifier(value="sportistaVezba-repository") SportistaVezbaRepository svr,
-             @Qualifier(value="sportista-repository") SportistaRepository sr){
-         return new SportistaVezbaService(svr,sr, new VezbaRepository(getJdbcTemplate(dataSource())));
+             @Qualifier(value="sportista-repository") SportistaRepository sr,
+             @Qualifier(value = "vezba-repository") VezbaRepository vr){
+         return new SportistaVezbaService(svr, sr, vr);
      }
     
 }

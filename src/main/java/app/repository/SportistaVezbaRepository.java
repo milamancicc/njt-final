@@ -8,6 +8,7 @@ import app.domain.Sportista;
 import app.domain.SportistaVezba;
 import app.domain.Vezba;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,19 +20,24 @@ import org.springframework.stereotype.Repository;
 public class SportistaVezbaRepository {
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public SportistaVezbaRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
     
     public void save(SportistaVezba sv){
         jdbcTemplate.update("INSERT INTO sportista_vezba (sportista_id, vezba_id, brojPonavljanja) VALUES (?,?,?)", 
-                sv.getSportista().getKorisnickoIme(), sv.getVezba().getNaziv(), sv.getBrojPonavljanja());
+                sv.getSportista().getKorisnickoIme(),
+                sv.getVezba().getNaziv(),
+                sv.getBrojPonavljanja());
     
     }
     
     
     public void delete(String sportistaId, String vezbaId) {
-        jdbcTemplate.update("DELETE FROM sportista_vezba WHERE sportista_id=? AND vezba_id=?",sportistaId, vezbaId);
+        jdbcTemplate.update("DELETE FROM sportista_vezba WHERE sportista_id=? AND vezba_id=?",
+                sportistaId,
+                vezbaId);
     }
     
     

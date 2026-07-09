@@ -16,14 +16,13 @@ import app.repository.VezbaRepository;
  */
 public class SportistaVezbaConverter implements Converter<SportistaVezba, SportistaVezbaDto> {
 
-    private SportistaRepository sr;
-    private VezbaRepository vr;
+    private final SportistaRepository sr;
+    private final VezbaRepository vr;
 
     public SportistaVezbaConverter(SportistaRepository sr, VezbaRepository vr) {
         this.sr = sr;
         this.vr = vr;
     }
-    
     
     
     @Override

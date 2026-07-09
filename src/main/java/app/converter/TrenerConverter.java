@@ -25,7 +25,6 @@ public class TrenerConverter implements Converter<Trener, TrenerDto> {
     }
     
     
-    
     @Override
     public Trener toEntity(TrenerDto dto) {
         List<SportistaDto> sportistiDto = dto.getSportisti();

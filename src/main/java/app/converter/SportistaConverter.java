@@ -7,7 +7,6 @@ package app.converter;
 import app.domain.Sportista;
 import app.dto.SportistaDto;
 import app.repository.TrenerRepository;
-import java.time.LocalDate;
 
 /**
  *
@@ -15,12 +14,11 @@ import java.time.LocalDate;
  */
 public class SportistaConverter implements Converter<Sportista, SportistaDto> {
 
-    public final TrenerRepository tr;
+    private final TrenerRepository tr;
 
     public SportistaConverter(TrenerRepository trenerRepository) {
         this.tr = trenerRepository;
     }
-    
     
     
     @Override

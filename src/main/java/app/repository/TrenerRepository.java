@@ -25,43 +25,46 @@ public class TrenerRepository {
     }
     
     public Trener findById(String id) {
-         Trener t = jdbcTemplate.queryForObject(
-        "SELECT * FROM trener WHERE korisnickoIme=?",
-        (rs,rowNum)->{
+         List<Trener> treneri = jdbcTemplate.query(
+            "SELECT * FROM trener WHERE korisnickoIme=?",
+            (rs, rowNum) -> {
+                Trener t = new Trener();
+                t.setKorisnickoIme(rs.getString("korisnickoIme"));
+                t.setSifra(rs.getString("sifra"));
+                t.setIme(rs.getString("ime"));
+                t.setPrezime(rs.getString("prezime"));
+                
+                return t;
+            },
+            id
+        );
 
-            Trener trener = new Trener();
+        if (treneri.isEmpty()) {
+            return null;
+        }
 
-            trener.setKorisnickoIme(rs.getString("korisnickoIme"));
-            trener.setSifra(rs.getString("sifra"));
-            trener.setIme(rs.getString("ime"));
-            trener.setPrezime(rs.getString("prezime"));
+        Trener t = treneri.get(0);
+         
 
-            return trener;
-        },
-        id
-    );
+        List<Sportista> sportisti = jdbcTemplate.query(
+            "SELECT * FROM sportista WHERE trener=?",
+            (rs,rowNum)->{
 
+                Sportista s = new Sportista();
 
-    List<Sportista> sportisti = jdbcTemplate.query(
-    "SELECT * FROM sportista WHERE trener=?",
-    (rs,rowNum)->{
+                s.setKorisnickoIme(rs.getString("korisnickoIme"));
+                s.setSifra(rs.getString("sifra"));
+                s.setIme(rs.getString("ime"));
+                s.setPrezime(rs.getString("prezime"));
+                s.setTrener(t);
 
-        Sportista s = new Sportista();
+                return s;
+            },
+            id
+        );
 
-        s.setKorisnickoIme(rs.getString("korisnickoIme"));
-        s.setSifra(rs.getString("sifra"));
-        s.setIme(rs.getString("ime"));
-        s.setPrezime(rs.getString("prezime"));
+        t.setSportistaList(sportisti);
 
-        s.setTrener(t);
-
-        return s;
-    },
-    id
-);
-
-t.setSportistaList(sportisti);
-
-    return t;
+        return t;
     }
 }

@@ -79,7 +79,6 @@ public class Sportista implements Serializable {
         this.prezime = prezime;
         this.pol = pol;
         this.datumRodjenja = datumRodjenja;
-        this.sportistaVezbaList = sportistaVezbaList;
         this.trener = trener;
     }
     

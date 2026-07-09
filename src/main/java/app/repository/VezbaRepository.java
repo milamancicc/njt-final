@@ -8,13 +8,14 @@ import app.domain.Vezba;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author PC
  */
+@Repository(value = "vezba-repository")
 public class VezbaRepository {
-    
     
     private final JdbcTemplate jdbcTemplate;
     
