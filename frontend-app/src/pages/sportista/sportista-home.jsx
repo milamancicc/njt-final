@@ -34,6 +34,41 @@ function SportistaHome(){
 
     }, []);
 
+    function generisiIzvestaj(){
+
+        fetch(
+            `http://localhost:8080/Projekat/api/izvestaj/${sportista.korisnickoIme}`
+        )
+        .then(response => {
+
+            if(!response.ok){
+                throw new Error("Greška pri generisanju izveštaja");
+            }
+
+            return response.blob();
+
+        })
+        .then(blob => {
+
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = "izvestaj.pdf";
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+
+        })
+        .catch(() => {
+            alert("Greška pri generisanju izveštaja.");
+        });
+
+    }
 
     return(
         <div>
@@ -70,6 +105,12 @@ function SportistaHome(){
                     </table>
                 )
             }
+
+            <button onClick={generisiIzvestaj}>
+                Preuzmi izveštaj
+            </button>
+
+            <br/><br/>
 
             <button onClick={handleLogout}>
                 Logout
