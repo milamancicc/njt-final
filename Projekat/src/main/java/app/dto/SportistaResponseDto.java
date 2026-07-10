@@ -18,14 +18,18 @@ public class SportistaResponseDto {
     private Character pol;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate datumRodjenja;
+    private String trenerId;
 
-    public SportistaResponseDto(String korisnickoIme, String ime, String prezime, Character pol, LocalDate datumRodjenja) {
+    public SportistaResponseDto(String korisnickoIme, String ime, String prezime, Character pol, LocalDate datumRodjenja, String trenerId) {
         this.korisnickoIme = korisnickoIme;
         this.ime = ime;
         this.prezime = prezime;
         this.pol = pol;
         this.datumRodjenja = datumRodjenja;
+        this.trenerId = trenerId;
     }
+    
+    
 
     public String getKorisnickoIme() {
         return korisnickoIme;
@@ -65,6 +69,14 @@ public class SportistaResponseDto {
 
     public void setDatumRodjenja(LocalDate datumRodjenja) {
         this.datumRodjenja = datumRodjenja;
+    }
+
+    public String getTrenerId() {
+        return trenerId;
+    }
+
+    public void setTrenerId(String trenerId) {
+        this.trenerId = trenerId;
     }
     
     

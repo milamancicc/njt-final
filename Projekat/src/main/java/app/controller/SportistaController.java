@@ -46,7 +46,7 @@ public class SportistaController {
             return null;
         }
         String token = jwtUtil.generateToken(s.getKorisnickoIme());
-        SportistaResponseDto res = new SportistaResponseDto(s.getKorisnickoIme(), s.getIme(), s.getPrezime(), s.getPol(), s.getDatumRodjenja());
+        SportistaResponseDto res = new SportistaResponseDto(s.getKorisnickoIme(), s.getIme(), s.getPrezime(), s.getPol(), s.getDatumRodjenja(), s.getTrenerId());
         return new LoginResponseDto(token, res);
 
     }

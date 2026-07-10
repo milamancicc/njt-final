@@ -10,6 +10,7 @@ function SportistaHome(){
         localStorage.getItem("sportista")
     );
 
+
     function handleLogout(){
         localStorage.removeItem("sportista");
         localStorage.removeItem("token");
@@ -39,6 +40,7 @@ function SportistaHome(){
             <h1>
                 Dobrodošao {sportista.ime} {sportista.prezime}
             </h1>
+            <p>Moj trener: {sportista.trenerId}</p>
              
             <h2>Moje vezbe</h2>
             {
