@@ -4,8 +4,12 @@
  */
 package app.controller;
 
+import app.dto.LoginResponseDto;
 import app.dto.SportistaDto;
+import app.dto.SportistaResponseDto;
+import app.security.JwtUtil;
 import app.service.SportistaService;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,21 +30,25 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:5173")
 public class SportistaController {
     private final SportistaService sportistaService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public SportistaController(SportistaService sportistaService) {
-        System.out.println("SPORTISTA CONTROLLER UCITAN");
+    public SportistaController(SportistaService sportistaService, JwtUtil jwtUtil) {
         this.sportistaService = sportistaService;
+        this.jwtUtil = jwtUtil;
     }
 
 
     @PostMapping("/login")
-    public SportistaDto login(@RequestBody SportistaDto sportista){
+    public LoginResponseDto login(@RequestBody SportistaDto sportista){
+        SportistaDto s = sportistaService.login(sportista.getKorisnickoIme(), sportista.getSifra());
+        if(s == null){
+            return null;
+        }
+        String token = jwtUtil.generateToken(s.getKorisnickoIme());
+        SportistaResponseDto res = new SportistaResponseDto(s.getKorisnickoIme(), s.getIme(), s.getPrezime(), s.getPol(), s.getDatumRodjenja());
+        return new LoginResponseDto(token, res);
 
-        return sportistaService.login(
-                sportista.getKorisnickoIme(),
-                sportista.getSifra()
-        );
     }
     
     @GetMapping("/trener/{trenerId}")
@@ -52,7 +60,6 @@ public class SportistaController {
     
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id){
-        System.out.println("BRISEM SPORTISTU: " + id);
         sportistaService.delete(id);
     }
     

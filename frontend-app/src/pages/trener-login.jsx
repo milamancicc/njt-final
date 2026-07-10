@@ -14,36 +14,34 @@ function TrenerLogin(){
         setSifra(e.target.value);
     }
 
-    function handleSubmit(e){
+    async function handleSubmit(e){
         e.preventDefault();
-        fetch("http://localhost:8080/Projekat/api/treneri/login",
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch("http://localhost:8080/Projekat/api/treneri/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({
-                korisnickoIme,
-                sifra
+            body: JSON.stringify({
+                korisnickoIme: korisnickoIme,
+                sifra: sifra
             })
-        })
-        .then(response=>response.json())
-        .then(data=>{
-
-            if(data==null){
-                alert("Pogresno korisnicko ime ili sifra");
-            }
-            else{
-
-                localStorage.setItem(
-                    "trener",
-                    JSON.stringify(data)
-                );
-
-                navigate("/trener-home");
-            }
-
         });
+        const text = await response.text();
+        if(text === ""){
+            alert("Pogresno korisnicko ime ili sifra");
+        }
+        else{
+            const data = JSON.parse(text);
+            localStorage.setItem(
+                "token",
+                data.token
+            );
+            localStorage.setItem(
+                "trener",
+                JSON.stringify(data.korisnik)
+            );
+            navigate("/trener-home");
+        }
 
     }
 
@@ -57,6 +55,7 @@ function TrenerLogin(){
                 <input type="password" value={sifra} onChange={handleSifra}></input>
                 <input type="submit" value="Log in"/>
             </form>
+            <button onClick={()=>navigate("/")}>Vrati se na pocetnu stranicu</button>
         </div>
     )
 }

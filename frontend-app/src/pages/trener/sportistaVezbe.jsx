@@ -61,7 +61,6 @@ function SportistaVezbe(){
 
             if(response.ok){
 
-                alert("Izmenjeno");
 
                 window.location.reload();
 
@@ -83,7 +82,6 @@ function SportistaVezbe(){
 
             if(response.ok){
 
-                alert("Vežba obrisana");
 
                 window.location.reload();
 
@@ -197,7 +195,12 @@ function SportistaVezbe(){
             <input
             type="number"
             value={noviBroj}
-            onChange={(e)=>setNoviBroj(e.target.value)}
+            min={0}
+            onChange={(e)=>{
+                if(e.target.value >= 0){
+                    setNoviBroj(e.target.value);
+                }
+            }}
             />
 
 

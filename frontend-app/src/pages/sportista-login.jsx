@@ -33,10 +33,14 @@ function SportistaLogin(){
         else{
             const data = JSON.parse(text);
             localStorage.setItem(
-                "sportista",
-                JSON.stringify(data)
+                "token",
+                data.token
             );
-            navigate("/sportista");
+            localStorage.setItem(
+                "sportista",
+                JSON.stringify(data.korisnik)
+            );
+            navigate("/sportista-home");
         }
     }
 
@@ -50,6 +54,7 @@ function SportistaLogin(){
                 <input type="password" value={sifra} onChange={handleSifra} required></input>
                 <input type="submit" value="Log in"/>
             </form>
+            <button onClick={()=>navigate("/")}>Vrati se na pocetnu stranicu</button>
         </div>
     )
 }

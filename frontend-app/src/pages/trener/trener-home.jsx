@@ -52,7 +52,6 @@ function TrenerHome(){
 
             if(response.ok){
 
-                alert("Sportista obrisan");
 
                 ucitajSportiste();
 

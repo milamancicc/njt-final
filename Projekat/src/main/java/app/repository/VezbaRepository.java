@@ -5,6 +5,7 @@
 package app.repository;
 
 import app.domain.Vezba;
+import app.dto.VezbaDto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,6 +42,17 @@ public class VezbaRepository {
             naziv
         );
     
+    }
+    
+    public List<VezbaDto> findAll(){
+        return jdbcTemplate.query("SELECT * FROM vezba", (rs, rowNum)->{
+            VezbaDto v = new VezbaDto();
+            v.setNaziv(rs.getString("naziv"));
+            v.setOpis(rs.getString("opis"));
+            v.setNorma(rs.getInt("norma"));
+            
+            return v;
+        });
     }
     
 }

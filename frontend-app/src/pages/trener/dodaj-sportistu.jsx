@@ -31,7 +31,7 @@ function DodajSportistu(){
     function handleSubmit(e){
 
         e.preventDefault();
-
+        
          fetch(
             "http://localhost:8080/Projekat/api/sportisti",
             {
@@ -47,8 +47,6 @@ function DodajSportistu(){
         .then(response => {
 
             if(response.ok){
-
-                alert("Sportista uspešno dodat");
 
                 navigate("/trener-home");
 
@@ -127,6 +125,7 @@ function DodajSportistu(){
                     type="date"
                     name="datumRodjenja"
                     value={sportista.datumRodjenja}
+                    placeholder="dd-MM-yyyy"
                     onChange={handleChange}
                     required
                 />

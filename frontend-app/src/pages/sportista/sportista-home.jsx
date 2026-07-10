@@ -12,12 +12,19 @@ function SportistaHome(){
 
     function handleLogout(){
         localStorage.removeItem("sportista");
+        localStorage.removeItem("token");
         navigate("/sportista-login");
     }
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
         fetch(
-            `http://localhost:8080/Projekat/api/sportista-vezbe/${sportista.korisnickoIme}`
+            `http://localhost:8080/Projekat/api/sportista-vezbe/${sportista.korisnickoIme}`,
+            {
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
+            }
         )
         .then(response => response.json())
         .then(data => {

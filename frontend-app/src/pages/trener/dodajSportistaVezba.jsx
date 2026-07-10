@@ -1,5 +1,5 @@
-import {useState} from "react";
 import {useNavigate,useParams} from "react-router-dom";
+import {useState, useEffect} from "react";
 import TrenerMeni from "../../components/TrenerMeni";
 
 
@@ -7,7 +7,7 @@ function DodajSportistaVezba(){
 
     const {id} = useParams();
     const navigate = useNavigate();
-
+    const [sveVezbe, setSveVezbe] = useState([]);
 
     const [vezba,setVezba] = useState({
         sportistaId:id,
@@ -15,6 +15,15 @@ function DodajSportistaVezba(){
         brojPonavljanja:0
     });
 
+    useEffect(()=>{
+
+        fetch("http://localhost:8080/Projekat/api/vezbe")
+        .then(response => response.json())
+        .then(data => {
+            setSveVezbe(data);
+        });
+
+    },[]);
 
 
     function handleChange(e){
@@ -32,7 +41,7 @@ function DodajSportistaVezba(){
 
         e.preventDefault();
 
-
+        console.log(vezba);
         fetch(
             "http://localhost:8080/Projekat/api/sportista-vezbe",
             {
@@ -47,14 +56,13 @@ function DodajSportistaVezba(){
 
             if(response.ok){
 
-                alert("Vežba dodata");
 
                 navigate(`/sportista-vezbe/${id}`);
 
             }
             else{
 
-                alert("Greška");
+                alert("Greška, sportista vec ima podatke za datu vezbu. Oni se mogu samo izmeniti.");
 
             }
 
@@ -80,12 +88,23 @@ function DodajSportistaVezba(){
                     Vežba:
                 </label>
 
-                <input
-                    type="text"
+                <select
                     name="vezbaId"
                     value={vezba.vezbaId}
                     onChange={handleChange}
-                />
+                >
+                    <option value="">Izaberi vezbu</option>
+                    {
+                        sveVezbe.map(v => (
+                            <option 
+                                key={v.naziv}
+                                value={v.naziv}
+                            >
+                                {v.naziv}
+                            </option>
+                        ))
+                    }
+                </select>
 
 
                 <label>
@@ -96,6 +115,7 @@ function DodajSportistaVezba(){
                     type="number"
                     name="brojPonavljanja"
                     value={vezba.brojPonavljanja}
+                    min={0}
                     onChange={handleChange}
                 />
 
@@ -106,7 +126,7 @@ function DodajSportistaVezba(){
 
 
             </form>
-
+            <button onClick={() => navigate(`/sportista-vezbe/${id}`)}>Povratak na sportistu {id}</button>
         </div>
     );
 
