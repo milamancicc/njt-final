@@ -43,22 +43,40 @@ public class SportistaVezbaRepository {
     
     public List<SportistaVezba> findBySportistaId(String sportistaId){
 
-    return jdbcTemplate.query(
-        "SELECT * FROM sportista_vezba WHERE sportista_id=?",
+    return jdbcTemplate.query("SELECT\n" + "    sv.sportista_id,\n" + "    sv.vezba_id,\n" + "    sv.brojPonavljanja,\n" + "    v.naziv,\n" + "    v.norma,\n" + "    v.opis\n" + "FROM sportista_vezba sv\n" + "JOIN vezba v\n" + "ON sv.vezba_id = v.naziv\n" + "WHERE sv.sportista_id=?\n",
         (rs, rowNum) -> {
 
             SportistaVezba sv = new SportistaVezba();
 
             Sportista sportista = new Sportista();
-            sportista.setKorisnickoIme(rs.getString("sportista_id"));
+            sportista.setKorisnickoIme(
+                rs.getString("sportista_id")
+            );
+
 
             Vezba vezba = new Vezba();
-            vezba.setNaziv(rs.getString("vezba_id"));
+
+            vezba.setNaziv(
+                rs.getString("naziv")
+            );
+
+            vezba.setNorma(
+                rs.getInt("norma")
+            );
+
+            vezba.setOpis(
+                rs.getString("opis")
+            );
+
 
             sv.setSportista(sportista);
             sv.setVezba(vezba);
 
-            sv.setBrojPonavljanja(rs.getInt("brojPonavljanja"));
+
+            sv.setBrojPonavljanja(
+                rs.getInt("brojPonavljanja")
+            );
+
 
             return sv;
         },

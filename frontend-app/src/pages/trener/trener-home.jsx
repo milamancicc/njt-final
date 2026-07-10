@@ -64,6 +64,43 @@ function TrenerHome(){
 
     }
 
+
+    function generisiIzvestaj(id){
+
+        fetch(
+            `http://localhost:8080/Projekat/api/izvestaj/${id}`
+        )
+        .then(response => {
+
+            if(!response.ok){
+                throw new Error("Greška pri generisanju izveštaja");
+            }
+
+            return response.blob();
+
+        })
+        .then(blob => {
+
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = "izvestaj.pdf";
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+
+    }
+
     return(
         <div>
             <TrenerMeni />
@@ -91,6 +128,7 @@ function TrenerHome(){
                             <th>Datum rodjenja</th>
                             <th>Obrisi</th>
                             <th>Prikaz vezbi</th>
+                            <th>Izveštaj</th>
                         </tr>
                     </thead>
 
@@ -116,6 +154,13 @@ function TrenerHome(){
                                         onClick={() => prikaziVezbe(s.korisnickoIme)}
                                     >
                                         Prikaži vežbe
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+                                        onClick={() => generisiIzvestaj(s.korisnickoIme)}
+                                    >
+                                        Generiši izveštaj
                                     </button>
                                 </td>
                                 
